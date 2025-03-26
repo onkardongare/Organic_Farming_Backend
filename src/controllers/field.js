@@ -12,7 +12,7 @@ exports.createField = async (req, res) => {
     await field.save();
     res.status(201).json({ message: "Field created successfully", field });
   } catch (error) {
-    console.log("error in create field")
+    console.log("error in create field",error)
     res.status(500).json({ message: "Error creating field", error: error.message });
   }
 };
@@ -21,8 +21,11 @@ exports.createField = async (req, res) => {
 exports.getAllFields = async (req, res) => {
   try {
     const fields = await Field.find({ owner: req.user.id });
+    console.log("something in get all fields")
+    console.log("fields", fields)
     res.status(200).json(fields);
   } catch (error) {
+    console.log("fields errrrrr",error)
     res.status(500).json({ message: "Error fetching fields", error: error.message });
   }
 };

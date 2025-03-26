@@ -70,8 +70,8 @@ function trimData(response) {
                 dayData = {
                     date: date,
                     day: time.format('ddd'),
-                    high: timeSeries.data.instant.details.air_temperature,
-                    low: timeSeries.data.instant.details.air_temperature,
+                    high: Math.round(timeSeries.data.instant.details.air_temperature),
+                    low: Math.round(timeSeries.data.instant.details.air_temperature),
                     icon: 'cloud' // Default to cloud, will update later
                 };
                 daily.push(dayData);

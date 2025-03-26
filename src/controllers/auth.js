@@ -64,8 +64,10 @@ exports.createUser = async (req, res) => {
                 // Create a JWT token after successfully creating the user
                 const token = jwt.sign(sanitizeUser(doc), process.env.SECRET_KEY, { expiresIn: '1h' });
 
-                 // ✅ Remove password & salt from the response
-                 const { password, salt: _, ...safeUser } = doc.toObject();
+                // ✅ Remove password & salt from the response
+                const { password, salt: _, _id, ...rest } = doc.toObject();
+                const safeUser = { id: _id, ...rest };
+
 
                 // Send the JWT token back in the response
                 res.status(201).json({

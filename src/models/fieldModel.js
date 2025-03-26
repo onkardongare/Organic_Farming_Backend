@@ -46,6 +46,31 @@ const fieldSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  updatedAt: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+// Update the updatedAt field before saving
+fieldSchema.pre('save', function(next) {
+  this.updatedAt = Date.now();
+  next();
+});
+
+// Convert _id to id for frontend simplicity
+fieldSchema.virtual('id').get(function() {
+  return this._id;
+});
+
+// Transform output when converting to JSON
+fieldSchema.set('toJSON', {
+  virtuals: true,
+  versionKey: false,
+  getters: true,
+  transform: function (doc, ret) {
+      delete ret._id;
+  }
 });
 
 const Field = mongoose.model("Field", fieldSchema);

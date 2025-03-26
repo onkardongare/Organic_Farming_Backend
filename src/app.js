@@ -12,6 +12,8 @@ const userRouter = require('./routes/userRoutes');
 const fieldRouter = require('./routes/fieldRoutes');
 const newsRouter = require('./routes/newsRoutes');
 const weatherRouter = require("./routes/weatherRoutes");
+const schemeNewsRouter = require("./routes/schemeRoutes");
+const organicArticlesRouter = require("./routes/articleRoutes")
 
 const { User } = require('./models/userModel');
 const { isAuth, sanitizeUser } = require('./utils/common');
@@ -33,6 +35,7 @@ const opts = {
 passport.use(
     new JwtStrategy(opts, async (jwt_payload, done) => {
         try {
+            console.log("something")
             const user = await User.findById(jwt_payload.id);
             if (user) {
                 return done(null, sanitizeUser(user));  // Attach user to req.user
@@ -65,9 +68,11 @@ const authMiddleware = () => passport.authenticate('jwt', { session: false });
 // Routes
 server.use('/auth', authRouter.router);  // Authentication Routes
 server.use('/user', authMiddleware(), userRouter.router);  // Protect user routes
-server.use('/field', fieldRouter); // field routes
+server.use('/field', authMiddleware(), fieldRouter); // field routes
 server.use('/news', newsRouter); // farming related news
 server.use('/weather', weatherRouter); // weather routes
+server.use('/schemes', schemeNewsRouter); // government scheme news
+server.use('/articles', organicArticlesRouter); // organic farming articles
 
 
 module.exports = server;
